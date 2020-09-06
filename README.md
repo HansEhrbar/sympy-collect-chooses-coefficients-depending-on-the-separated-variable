@@ -1,0 +1,1 @@
+# sympy-collect-chooses-coefficients-depending-on-the-separated-variable
