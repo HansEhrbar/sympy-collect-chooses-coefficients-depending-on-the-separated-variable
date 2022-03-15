@@ -1,0 +1,78 @@
+\documentclass[legalpaper]{article}
+\usepackage{amssymb,amsmath}
+\usepackage[dvipsnames]{xcolor}
+\newcommand\mycdot{\,}
+\usepackage{listings}
+
+
+\newcommand\alphaC{{\color{OliveGreen}\mathbf\alpha}}
+\newcommand\betaC{{\color{red}\mathbf\beta}}
+\newcommand\gammaC{{\color{blue}\mathbf\gamma}}
+\newcommand\psiC{{\color{OliveGreen}\mathbf\psi}}
+\newcommand\thetaC{{\color{red}\mathbf\theta}}
+\newcommand\CCCtwoC{{\color{red}\mathbf{C_2}}}
+\newcommand\tauC{{\color{red}\mathbf\tau}}
+\newcommand\alphaSquaredC{{\color{OliveGreen}\mathbf{\alpha^2}}}
+\newcommand\betaSquaredC{{\color{red}\mathbf{\beta^2}}}
+\newcommand\gammaSquaredC{{\color{blue}\mathbf{\gamma^2}}}
+\newcommand\tauSquaredC{{\color{red}\mathbf{\tau^2}}}
+\newcommand\thetaSquaredC{{\color{red}\mathbf{\theta^2}}}
+
+\begin{document}
+  Here is a polynomial for which I need a mathematical proof that it is non-negative:
+    \begin{align}
+    \CCCtwoC&= \bigl(\alphaC{\mycdot}\psiC+\betaC{\mycdot}\thetaC+\gammaC{\mycdot}(\thetaC+\psiC)\bigr)^2
+     -4{\mycdot}(\alphaC+\betaC+\gammaC){\mycdot}\gammaC{\mycdot}\psiC{\mycdot}\thetaC\label{CCC_2}
+    \end{align}
+ Through some tedious math I can show that \(\CCCtwoC\) satisfies the identity
+  \begin{align}
+    (\alphaC+\gammaC)^2{\mycdot}\frac{\CCCtwoC}{\thetaSquaredC}
+    &=4{\mycdot}\alphaC{\mycdot}\betaC{\mycdot}\gammaC
+    {\mycdot}(\alphaC+\betaC+\gammaC)
+    +\Bigl((\alphaC+\gammaC)^2{\mycdot}\frac{\psiC}{\thetaC}+\alphaC{\mycdot}\betaC-(\alphaC+\betaC+\gammaC){\mycdot}\gammaC\Bigr)^2\label{positive_version_of_CCC_2}
+  \end{align}
+  Since the rhs is obviously non-negative this is the proof I need.  
+  The proof introduces the new parameter \(\tauC=\psiC/\thetaC\) and shows that \(\CCCtwoC/\thetaSquaredC\) can be written in the form
+            \begin{align}
+      \frac{\CCCtwoC}{\thetaSquaredC}&= {A}_0 +  {A}_1{\mycdot}\tauC + {A}_2{\mycdot}\tauSquaredC\notag\\
+     \intertext{with}
+       {A}_0 &= (\betaC+\gammaC)^2\label{EEE_0}\\
+       {A}_1 &= 2{\mycdot}\bigl(\alphaC{\mycdot}\betaC-(\alphaC+\betaC+\gammaC){\mycdot}\gammaC\bigr) \label{EEE_1}\\
+       {A}_2 &= (\alphaC+\gammaC)^2 \label{EEE_2}\\
+       \intertext{and re-writes it in the form}
+       \frac{\CCCtwoC}{\thetaSquaredC}&= {E} +  {F}{\mycdot}(\tauC-{G})^2\notag
+            \end{align}
+            where all three polynomials \({E}\), \({F}\), and \({G}\) do not contain \(\tauC\).
+            This gives \eqref{positive_version_of_CCC_2}.
+
+                 I tried to use \texttt{SymPy} for this proof with the \texttt{python3} code
+                 \texttt{20200910\_sympy.py}
+                 submitted at the same time.
+ \begin{scriptsize}
+    \lstinputlisting[language=python]{20200910_sympy.py}
+ \end{scriptsize}
+ The output of the \texttt{sympy.pprint} command is
+  \begin{align}
+    \CCCtwoC &=-\gammaC{\mycdot}\tauC{\mycdot}\thetaSquaredC{\mycdot}(4{\mycdot}\alphaC + 4{\mycdot}\betaC + 4{\mycdot}\gammaC)
+    + (\alphaC{\mycdot}\tauC{\mycdot}\thetaC + \betaC{\mycdot}\thetaC + \gammaC{\mycdot}(\tauC{\mycdot}\thetaC + \thetaC))^2\notag
+  \end{align}
+ which can be re-written as
+  \begin{align}
+    \CCCtwoC &=-4{\mycdot}\gammaC{\mycdot}\tauC{\mycdot}\thetaSquaredC{\mycdot}(\alphaC + \betaC + \gammaC)
+    + \thetaSquaredC{\mycdot}\bigl((\alphaC+\gammaC){\mycdot}\tauC + \betaC + \gammaC)^2\notag
+  \end{align}
+  This is similar to \eqref{positive_version_of_CCC_2} but has one important difference:
+  It can be re-written in the form
+      \begin{align}
+      \CCCtwoC&= {E} +  {F}{\mycdot}(\tauC-{G})^2\notag
+      \end{align}
+      but whereas the decomposition in my proof required that all three polynomials \({E}\), \({F}\), and \({G}\)
+      do not contain \(\tauC\),
+      the above \({E}=-4{\mycdot}\gammaC{\mycdot}\tauC{\mycdot}\thetaSquaredC{\mycdot}(\alphaC + \betaC + \gammaC)\)
+      does contain \(\tauC\).
+      I think this is a design error in the \texttt{sympy.collect} command.
+      Can someone make a \texttt{sympy.collect\_unrelated} command
+      which does this?
+
+\end{document}
+
